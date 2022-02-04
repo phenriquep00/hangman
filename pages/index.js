@@ -1,5 +1,7 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import appConfig from '../config.json';
+import React from 'react';
+
 
 function Titulo(props) {
     const Tag = props.tag;
@@ -20,6 +22,7 @@ function Titulo(props) {
 
 
 export default function PaginaInicial() {
+    const [image, setImage] = React.useState('C:\\Users\\phenr\\Desktop\\hangman\\src\\img\\0.png');
 
     return (
         <>
@@ -47,8 +50,29 @@ export default function PaginaInicial() {
                     }}
                 >
                     {/*page content*/}
-
-
+                    <Box
+                        styleSheet={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            maxWidth: '400px',
+                            padding: '16px',
+                            backgroundColor: appConfig.theme.colors.neutrals[100],
+                            border: '1px solid',
+                            borderColor: appConfig.theme.colors.neutrals[999],
+                            borderRadius: '10px',
+                            flex: 1,
+                            minHeight: '400px',
+                        }}
+                    >
+                        <Image
+                            styleSheet={{
+                                borderRadius: '50%',
+                                marginBottom: '16px',
+                            }}
+                            src={`${image}`}
+                        />
+                    </Box>
                 </Box>
             </Box>
         </>
