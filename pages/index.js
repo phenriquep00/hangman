@@ -1,6 +1,8 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import appConfig from '../config.json';
 import React from 'react';
+import Keyboard from 'react-simple-keyboard';
+import 'react-simple-keyboard/build/css/index.css';
 
 
 function Titulo(props) {
@@ -22,7 +24,7 @@ function Titulo(props) {
 
 
 export default function PaginaInicial() {
-    const [image, setImage] = React.useState('C:\\Users\\phenr\\Desktop\\hangman\\src\\img\\0.png');
+    const [image, setImage] = React.useState('https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/0.png');
 
     return (
         <>
@@ -49,7 +51,7 @@ export default function PaginaInicial() {
                         backgroundColor: appConfig.theme.colors.neutrals[100],
                     }}
                 >
-                    {/*page content*/}
+                    {/*hangman box*/}
                     <Box
                         styleSheet={{
                             display: 'flex',
@@ -59,7 +61,7 @@ export default function PaginaInicial() {
                             padding: '16px',
                             backgroundColor: appConfig.theme.colors.neutrals[100],
                             border: '1px solid',
-                            borderColor: appConfig.theme.colors.neutrals[999],
+                            borderColor: appConfig.theme.colors.neutrals[100],
                             borderRadius: '10px',
                             flex: 1,
                             minHeight: '400px',
@@ -72,6 +74,67 @@ export default function PaginaInicial() {
                             }}
                             src={`${image}`}
                         />
+                    </Box>
+                    {/*word box*/}
+                    <Box
+                        styleSheet={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            maxWidth: '400px',
+                            padding: '16px',
+                            backgroundColor: appConfig.theme.colors.neutrals[100],
+                            border: '1px solid',
+                            borderColor: appConfig.theme.colors.neutrals[100],
+                            borderRadius: '10px',
+                            flex: 1,
+                            minHeight: '400px',
+                        }}
+                    >
+                        <Box
+                            styleSheet={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                minWidth: '300px',
+                                minHeight: '200px',
+                                padding: '10px',
+                                backgroundColor: appConfig.theme.colors.neutrals[100],
+                                border: '1px solid',
+                                borderColor: appConfig.theme.colors.neutrals[999],
+                                borderRadius: '10px',
+                                flex: 1,
+                                margin: '2px 2px 2px 2px'
+                            }}
+
+                        >
+                        </Box>
+                        {/* keyboard box */}
+                        <Box
+                            styleSheet={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                minWidth: '300px',
+                                minHeight: '200px',
+                                padding: '10px',
+                                backgroundColor: appConfig.theme.colors.neutrals[100],
+                                border: '1px solid',
+                                borderColor: appConfig.theme.colors.neutrals[999],
+                                borderRadius: '10px',
+                                flex: 1,
+                                margin: '2px 2px 2px 2px'
+                            }}
+
+                        >
+                            <Keyboard   
+                                layout={{
+                                    'default': [
+                                        'q w e r t y u i o p',
+                                        'a s d f g h j k l',
+                                        'z x c v b n m t'
+                                      ]
+                                }}
+                            />
+                        </Box>
                     </Box>
                 </Box>
             </Box>
