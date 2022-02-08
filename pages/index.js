@@ -7,7 +7,7 @@ import 'react-simple-keyboard/build/css/index.css';
 
 // TODO: Criar um banco de dados (supabase) com palavras para o jogo
 // escolher aleatoriamente uma palavra para ser a palavra da vez
-// modificar a imagem da forca para cada vez q o usuario erra alguma letra, dando um limite de 6 erros
+// [X] modificar a imagem da forca para cada vez q o usuario erra alguma letra, dando um limite de 6 erros
 // criar uma forma de recomeçar o jogo sem precisar dar refresh na pagina caso o jogador perca ou ganhe o jogo
 // adicionar efeitos sonoros
 
@@ -28,6 +28,8 @@ export default function PaginaInicial() {
     const [lettersPressed, setLettersPressed] = React.useState([]);
     const word = 'monkey';
     const [hiddenWord, setHiddenWord] = React.useState(Array.from({ length: word.length }, (_) => '_ '));
+    const [missedLetters, setMissedLetters] = React.useState(1);
+    const incrementCounter = () => setMissedLetters(missedLetters + 1);
 
     return (
         <>
@@ -189,8 +191,15 @@ export default function PaginaInicial() {
                                             ...lettersPressed,
                                             key
                                         ]);
+                                        if (Array.from(String(word)).includes(key) == false) {
+                                            setMissedLetters(incrementCounter)
+                                            if (missedLetters < 6) {
+                                                setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/${missedLetters}.png`)
+                                            } else {
+                                                setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/lose.png`)
+                                            }
+                                        }
                                     }
-
                                 }}
 
                             />
