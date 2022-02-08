@@ -5,9 +5,29 @@ import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
 
 
+// TODO: Criar um banco de dados (supabase) com palavras para o jogo
+// escolher aleatoriamente uma palavra para ser a palavra da vez
+// modificar a imagem da forca para cada vez q o usuario erra alguma letra, dando um limite de 6 erros
+// criar uma forma de recomeçar o jogo sem precisar dar refresh na pagina caso o jogador perca ou ganhe o jogo
+// adicionar efeitos sonoros
+
+
+function compare(w, hw, l) {
+    for (var x = 0; x < w.length; x++) {
+        let c = w.charAt(x);
+        if (c == l) {
+            // modificar a letra no array hiddenWord
+            hw[x] = c;
+        }
+    }
+    return hw;
+}
+
 export default function PaginaInicial() {
     const [image, setImage] = React.useState('https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/0.png');
     const [lettersPressed, setLettersPressed] = React.useState([]);
+    const word = 'monkey';
+    const [hiddenWord, setHiddenWord] = React.useState(Array.from({ length: word.length }, (_) => '_ '));
 
     return (
         <>
@@ -92,7 +112,7 @@ export default function PaginaInicial() {
 
                         >
                             <Box
-                            /* box of letters already pressed */
+                                /* box of letters already pressed */
                                 styleSheet={{
                                     display: 'flex',
                                     alignItems: 'center',
@@ -105,7 +125,9 @@ export default function PaginaInicial() {
                                     borderColor: appConfig.theme.colors.neutrals[100],
                                     borderRadius: '10px',
                                     flex: 1,
-                                    margin: '2px 2px 2px 2px'
+                                    margin: '2px 2px 2px 2px',
+                                    color: "#72bb9d",
+                                    fontSize: "28px"
                                 }}
 
                             >
@@ -122,14 +144,16 @@ export default function PaginaInicial() {
                                     padding: '10px',
                                     backgroundColor: appConfig.theme.colors.neutrals[100],
                                     border: '1px solid',
-                                    borderColor: appConfig.theme.colors.neutrals[999],
+                                    borderColor: appConfig.theme.colors.neutrals[100],
                                     borderRadius: '10px',
                                     flex: 1,
-                                    margin: '2px 2px 2px 2px'
+                                    margin: '2px 2px 2px 2px',
+                                    fontSize: "36px"
+
                                 }}
 
                             >
-                                _ _ _ _ _ _ _ _ _
+                                <div>{hiddenWord}</div>
                             </Box>
 
                         </Box>
@@ -158,22 +182,17 @@ export default function PaginaInicial() {
                                         'z x c v b n m t'
                                     ]
                                 }}
-                                buttonTheme={[
-                                    {
-                                      class: "hg-red",
-                                      buttons: "a"
-                                    }]}
-                                onKeyPress= {(key) => {
-                                    if (lettersPressed.includes(`${key}`) == false){
-                                        console.log(lettersPressed)
+                                onKeyPress={(key) => {
+                                    setHiddenWord(compare(word, hiddenWord, key));
+                                    if (lettersPressed.includes(`${key}`) == false) {
                                         setLettersPressed([
                                             ...lettersPressed,
                                             key
                                         ]);
                                     }
-                                    
-                                    
+
                                 }}
+
                             />
                         </Box>
                     </Box>
