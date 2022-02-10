@@ -8,6 +8,7 @@
     "dependencies": {
         "@skynexui/components": "^1.24.3",
         "@supabase/supabase-js": "^1.30.0",
-        "react-simple-keyboard": "^3.4.56"
+        "react-simple-keyboard": "^3.4.56",
+        "use-sound": "^4.0.1"
     }
 }

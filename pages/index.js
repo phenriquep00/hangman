@@ -3,7 +3,8 @@ import appConfig from '../config.json';
 import React from 'react';
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
+import useSound from 'use-sound';
 
 // TODO: [X] Criar um banco de dados (supabase) com palavras para o jogo
 // [X] escolher aleatoriamente uma palavra para ser a palavra da vez
@@ -25,7 +26,9 @@ function compare(w, hw, l) {
         }
     }
     return hw;
-}
+};
+
+
 
 
 export default function PaginaInicial() {
@@ -39,7 +42,7 @@ export default function PaginaInicial() {
         window.location.reload();
     };
     const [isVisible, setIsVisible] = React.useState(false);
-
+    const [play] = useSound('/meow.mp3');
 
     React.useEffect(() => {
         if (word == '') {
@@ -274,6 +277,9 @@ export default function PaginaInicial() {
                                 }}
                                 onKeyPress={(key) => {
                                     setHiddenWord(compare(word, hiddenWord, key));
+                                    if (Array.from(word).includes(key)) {
+                                        play
+                                    }
                                     if (hiddenWord == word) { // fix this
                                         setIsVisible(true);
                                     }
