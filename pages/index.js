@@ -4,12 +4,11 @@ import React from 'react';
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
 import { createClient } from '@supabase/supabase-js';
-import useSound from 'use-sound';
 
 // TODO: [X] Criar um banco de dados (supabase) com palavras para o jogo
 // [X] escolher aleatoriamente uma palavra para ser a palavra da vez
 // [X] modificar a imagem da forca para cada vez q o usuario erra alguma letra, dando um limite de 6 erros
-// criar uma forma de recomeçar o jogo sem precisar dar refresh na pagina caso o jogador perca ou ganhe o jogo
+// [X] criar uma forma de recomeçar o jogo sem precisar dar refresh na pagina caso o jogador perca ou ganhe o jogo
 // adicionar efeitos sonoros
 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkbHN2b2pzZWp0dHJnYWNlYnh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDQ0MjY1NDUsImV4cCI6MTk2MDAwMjU0NX0.4FTfOWeJxAS0Pzmdyfpn2LUv5zv1iOpJtTW_t8O3qLE'
@@ -42,7 +41,6 @@ export default function PaginaInicial() {
         window.location.reload();
     };
     const [isVisible, setIsVisible] = React.useState(false);
-    const [play] = useSound('/meow.mp3');
 
     React.useEffect(() => {
         if (word == '') {
@@ -71,7 +69,10 @@ export default function PaginaInicial() {
                     flexDirection: 'column'
                 }}
             >
-                <div>IN PROGRESS</div>
+                <div>
+                    <p>IN PROGRESS</p>
+                    <p>TODO: *Fix udnerscore not showing; *Add sound FX; *Stylize game completed div</p>
+                </div>
                 <Box
                     styleSheet={{
                         display: 'flex',
@@ -277,9 +278,6 @@ export default function PaginaInicial() {
                                 }}
                                 onKeyPress={(key) => {
                                     setHiddenWord(compare(word, hiddenWord, key));
-                                    if (Array.from(word).includes(key)) {
-                                        play
-                                    }
                                     if (hiddenWord == word) { // fix this
                                         setIsVisible(true);
                                     }
