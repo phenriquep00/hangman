@@ -1,0 +1,3 @@
+Arrumar um jeito melhor de escolher uma palavra aleatória vinda do supabase;
+
+Dar um jetio de fazer a hidden word ser carregada somente a pos a definição da word vinda do supabase;

@@ -16,18 +16,34 @@ const SUPABASE_URL = 'https://udlsvojsejttrgacebxz.supabase.co'
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 
-function compare(w, hw, l) {
+function compare(w, hw, l, lp) {
     for (var x = 0; x < w.length; x++) {
-        let c = w.charAt(x);
-        if (c == l) {
-            // modificar a letra no array hiddenWord
-            hw[x] = c;
+        if (lp.includes(w.charAt(x))) {
+            let c = w.charAt(x);
+            if (c == l) {
+                // modificar a letra no array hiddenWord
+                hw[x] = c;
+            }
         }
     }
     return hw;
 };
 
+function renderHiddenWord(w, lp) {
+    let arr = Array.from({ length: w.length }, () => '_ ')
+    if (lp.length == 0) {
+        return arr
+    } else {
 
+        for (let l of w) {
+            if (lp.includes(l)) {
+                arr[w.indexOf(l)] = l;
+
+            }
+        }
+        return arr
+    }
+}
 
 
 export default function PaginaInicial() {
@@ -48,11 +64,8 @@ export default function PaginaInicial() {
                 .from('words')
                 .select('*')
                 .then(({ data }) => {
-                    console.log('Dados da consulta:', data);
                     setWord(data[Math.floor(Math.random() * data.length)]['word']);
                     setHiddenWord(Array.from({ length: word.length }, () => '_ '));
-                    console.log("a palavra é: " + word.length);
-                    //console.log(hiddenWord)
                 });
         }
 
@@ -60,6 +73,7 @@ export default function PaginaInicial() {
 
     return (
         <>
+
             <Box
                 styleSheet={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -71,7 +85,6 @@ export default function PaginaInicial() {
             >
                 <div>
                     <p>IN PROGRESS</p>
-                    <p>TODO: *Fix udnerscore not showing; *Add sound FX; *Stylize game completed div</p>
                 </div>
                 <Box
                     styleSheet={{
@@ -124,7 +137,7 @@ export default function PaginaInicial() {
                                 padding: '10px',
                                 backgroundColor: appConfig.theme.colors.neutrals[100],
                                 border: '1px solid',
-                                borderColor: appConfig.theme.colors.neutrals[999],
+                                borderColor: appConfig.theme.colors.neutrals[100],
                                 borderRadius: '10px',
                                 flex: 1,
                                 margin: '2px 2px 2px 2px',
@@ -141,14 +154,14 @@ export default function PaginaInicial() {
                                     padding: '6px',
                                     backgroundColor: appConfig.theme.colors.neutrals[100],
                                     border: '1px solid',
-                                    borderColor: appConfig.theme.colors.neutrals[999],
+                                    borderColor: appConfig.theme.colors.neutrals[100],
                                     borderRadius: '10px',
                                     flex: 1,
                                     margin: '1px 1px 1px 1px',
                                     fontSize: "16px",
                                 }}
                             >
-                                correct word: {word}
+                                The correct word was: {word}
                             </Box>
                             <Box
                                 styleSheet={{
@@ -167,10 +180,22 @@ export default function PaginaInicial() {
                                     fontSize: "16px",
                                 }}
                             >
-                                <button type="submit" onClick={refreshPage}>Play again</button>
+                                <Button
+                                    type="submit"
+                                    label="Play again"
+                                    onClick={refreshPage}
+                                    buttonColors={{
+                                        contrastColor: appConfig.theme.colors.neutrals["000"],
+                                        mainColor: appConfig.theme.colors.primary[500],
+                                        mainColorLight: appConfig.theme.colors.primary[400],
+                                        mainColorStrong: appConfig.theme.colors.primary[600],
+                                    }}
+                                >
+
+                                </Button>
                             </Box>
                         </Box>}
-                        
+
                     </Box>
                     {/*word box*/}
                     <Box
@@ -232,6 +257,7 @@ export default function PaginaInicial() {
                                 styleSheet={{
                                     display: 'flex',
                                     alignItems: 'center',
+                                    flexDirection: 'row',
                                     maxWidth: '300px',
                                     width: "100%",
                                     maxHeight: '130px',
@@ -247,7 +273,7 @@ export default function PaginaInicial() {
                                 }}
 
                             >
-                                <div>{hiddenWord}</div>
+                                {renderHiddenWord(word, lettersPressed)}
                             </Box>
 
                         </Box>
@@ -273,29 +299,35 @@ export default function PaginaInicial() {
                                     'default': [
                                         'q w e r t y u i o p',
                                         'a s d f g h j k l',
-                                        'z x c v b n m t'
+                                        'z x c v b n m t',
+                                        'finish'
                                     ]
                                 }}
                                 onKeyPress={(key) => {
-                                    setHiddenWord(compare(word, hiddenWord, key));
-                                    if (hiddenWord == word) { // fix this
-                                        setIsVisible(true);
-                                    }
+
+                                    setHiddenWord(compare(word, hiddenWord, key, lettersPressed));
+
                                     if (lettersPressed.includes(`${key}`) == false) {
-                                        setLettersPressed([
-                                            ...lettersPressed,
-                                            key
-                                        ]);
-                                        if (Array.from(String(word)).includes(key) == false) {
-                                            setMissedLetters(incrementCounter)
-                                            if (missedLetters < 6) {
-                                                setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/${missedLetters}.png`)
-                                            } else {
-                                                // game over
-                                                setIsVisible(true);
-                                                setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/lose.png`)
+                                        if (key != 'finish') {
+                                            setLettersPressed([
+                                                ...lettersPressed,
+                                                key
+                                            ]);
+                                            if (Array.from(String(word)).includes(key) == false) {
+                                                setMissedLetters(incrementCounter)
+                                                if (missedLetters < 6) {
+                                                    setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/${missedLetters}.png`)
+                                                } else {
+                                                    // game over
+                                                    setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/lose.png`);
+                                                    setIsVisible(true);
+                                                }
                                             }
                                         }
+
+                                    }
+                                    if (renderHiddenWord(word, lettersPressed).includes('_ ') === false) { // fix this
+                                        setIsVisible(true);
                                     }
                                 }}
 
