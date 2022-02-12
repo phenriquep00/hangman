@@ -57,6 +57,7 @@ export default function PaginaInicial() {
         window.location.reload();
     };
     const [isVisible, setIsVisible] = React.useState(false);
+    const [isReady, setIsReady] = React.useState(false);
 
     React.useEffect(() => {
         if (word == '') {
@@ -66,7 +67,10 @@ export default function PaginaInicial() {
                 .then(({ data }) => {
                     setWord(data[Math.floor(Math.random() * data.length)]['word']);
                     setHiddenWord(Array.from({ length: word.length }, () => '_ '));
-                });
+                })
+                .then(
+                    setIsReady(true)
+                );
         }
 
     });
@@ -305,32 +309,34 @@ export default function PaginaInicial() {
                                 }}
                                 onKeyPress={(key) => {
 
-                                    setHiddenWord(compare(word, hiddenWord, key, lettersPressed));
+                                    if (isReady) {
+                                        
+                                        setHiddenWord(compare(word, hiddenWord, key, lettersPressed));
 
-                                    if (lettersPressed.includes(`${key}`) == false) {
-                                        if (key != 'finish') {
-                                            setLettersPressed([
-                                                ...lettersPressed,
-                                                key
-                                            ]);
-                                            if (Array.from(String(word)).includes(key) == false) {
-                                                setMissedLetters(incrementCounter)
-                                                if (missedLetters < 6) {
-                                                    setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/${missedLetters}.png`)
-                                                } else {
-                                                    // game over
-                                                    setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/lose.png`);
-                                                    setIsVisible(true);
+                                        if (lettersPressed.includes(`${key}`) == false) {
+                                            if (key != 'finish') {
+                                                setLettersPressed([
+                                                    ...lettersPressed,
+                                                    key
+                                                ]);
+                                                if (Array.from(String(word)).includes(key) == false) {
+                                                    setMissedLetters(incrementCounter)
+                                                    if (missedLetters < 6) {
+                                                        setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/${missedLetters}.png`)
+                                                    } else {
+                                                        // game over
+                                                        setImage(`https://raw.githubusercontent.com/phenriquep00/hangman/master/src/img/lose.png`);
+                                                        setIsVisible(true);
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                    }
-                                    if (renderHiddenWord(word, lettersPressed).includes('_ ') === false) { // fix this
-                                        setIsVisible(true);
+                                        }
+                                        if (renderHiddenWord(word, lettersPressed).includes('_ ') === false) { // fix this
+                                            setIsVisible(true);
+                                        }
                                     }
                                 }}
-
                             />
                         </Box>
                     </Box>
