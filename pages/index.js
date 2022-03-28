@@ -88,7 +88,7 @@ export default function PaginaInicial() {
                 }}
             >
                 <div>
-                    <p>IN PROGRESS</p>
+                    <p></p>
                 </div>
                 <Box
                     styleSheet={{
