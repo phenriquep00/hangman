@@ -88,7 +88,7 @@ export default function PaginaInicial() {
                 }}
             >
                 <div>
-                    <p></p>
+                    <p>CURRENTLY WITH PROBLEMS WITH THE DATA BASE</p>
                 </div>
                 <Box
                     styleSheet={{
